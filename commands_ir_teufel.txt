@@ -1,0 +1,29 @@
+Power
+{"Protocol":"NEC","Bits":32,"Data":"0x807F50AF","DataLSB":"0x01FE0AF5","Repeat":0}
+
+Mute
+{"Protocol":"NEC","Bits":32,"Data":"0x807FD02F","DataLSB":"0x01FE0BF4","Repeat":0}
+
+Optical 1
+{"Protocol":"NEC","Bits":32,"Data":"0x807F609F","DataLSB":"0x01FE06F9","Repeat":0}
+
+Optical 2
+{"Protocol":"NEC","Bits":32,"Data":"0x807FF00F","DataLSB":"0x01FE0FF0","Repeat":0}
+
+Mode
+{"Protocol":"NEC","Bits":32,"Data":"0x807FE21D","DataLSB":"0x01FE47B8","Repeat":0}
+
+Left
+{"Protocol":"NEC","Bits":32,"Data":"0x807FDA25","DataLSB":"0x01FE5BA4","Repeat":0}
+
+Right
+{"Protocol":"NEC","Bits":32,"Data":"0x807F1AE5","DataLSB":"0x01FE58A7","Repeat":0}
+
+Volume Up
+{"Protocol":"NEC","Bits":32,"Data":"0x807F7A85","DataLSB":"0x01FE5EA1","Repeat":0}
+
+Volume Down
+{"Protocol":"NEC","Bits":32,"Data":"0x807F6A95","DataLSB":"0x01FE56A9","Repeat":0}
+
+Return
+{"Protocol":"NEC","Bits":32,"Data":"0x807FC03F","DataLSB":"0x01FE03FC","Repeat":0}
