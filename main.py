@@ -40,53 +40,55 @@ class IRDecoderstation:
 
     def send_ir(self, data, data_lsb):
         data = {"Protocol":"NEC","Bits":32,"Data":data,"DataLSB":data_lsb,"Repeat":0}
-        self.client.publish("cmnd/IR/irsend", json.dumps(data));
+        msg = self.client.publish("cmnd/IR/irsend", json.dumps(data));
+        print(msg.rc)
 
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
+    client.publish("tele/IRAPI/LWT", "ON")
     client.subscribe("cmnd/IRAPI/#")
 
-def on_message(client, userdata, msg):
-    topic = msg.topic.split("/")[2]
+def on_disconnect(client, userdata, flags):
+    client.publish("tele/Fernseher/LWT", "OFF")
+
+def on_log(client, userdata, level, buf):
+    print("log: ",buf)
+
+def power(client, userdata, msg):
     if msg.payload.decode() == "true":
-        global published_topic
-        published_topic = topic
+        ds.power()
+
+def optical1(client, userdata, msg):
+    if msg.payload.decode() == "true":
+        ds.power()
+        time.sleep(10)
+        ds.optical1()
+
+def optical2(client, userdata, msg):
+    if msg.payload.decode() == "true":
+        ds.power()
+        time.sleep(10)
+        ds.optical2()
+        time.sleep(0.5)
+        ds.mode()
+        time.sleep(0.5)
+        for i in range(6):
+            ds.right()
+            time.sleep(0.5)
+        ds.return_menu()
 
 client = mqtt.Client()
 client.connect("192.168.1.22",1883,60)
 client.username_pw_set("mqtt", "mqtt")
 
-client.on_connect = on_connect
-client.on_message = on_message
-published_topic = ""
-
-client.loop_start()
-
 ds = IRDecoderstation(client)
-try:
-    while True:
-        global published_topic
-        if (published_topic == "Power"):
-            ds.power()
-            published_topic = ""
-        if (published_topic == "Optical2"):
-            ds.power()
-            time.sleep(10)
-            ds.optical2()
-            time.sleep(0.5)
-            ds.mode()
-            time.sleep(0.5)
-            for i in range(6):
-                ds.right()
-                time.sleep(0.5)
-            ds.return_menu()
-            published_topic = ""
-        if (published_topic == "Optical1"):
-            ds.power()
-            time.sleep(10)
-            ds.optical1()
-            published_topic = ""
-except KeyboardInterrupt:
-    print('Interrupted!')
 
-client.loop_stop();
+client.on_connect = on_connect
+client.on_disconnect = on_disconnect
+client.on_log = on_log
+
+client.message_callback_add("cmnd/IRAPI/Power", power)
+client.message_callback_add("cmnd/IRAPI/Optical1", optical1)
+client.message_callback_add("cmnd/IRAPI/Optical2", optical2)
+
+client.loop_forever()
