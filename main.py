@@ -5,6 +5,7 @@ import json
 import time
 import threading
 import uuid
+import os
 
 class IRDecoderstation:
     def __init__(self):
@@ -87,7 +88,7 @@ class Client:
         t.start()
 
     def send_data(self, arr):
-        c = Client(HOST, PORT, USER, PASSWD)
+        c = Client(self.host, self.port, self.user, self.passwd)
         c.connect()
         c.client.loop_start()
     
@@ -139,12 +140,12 @@ class Client:
         return arr
 
 
-HOST = "192.168.1.2"
-PORT = 1883
-USER = "mqtt"
-PASSWD = "mqtt"
+HOST = os.environ.get('MQTT_HOST', "127.0.0.1")
+PORT = os.environ.get('MQTT_PORT', 1883)
+USER = os.environ.get('MQTT_USER', "")
+PASS = os.environ.get('MQTT_PASS' "")
 
-main_client = Client(HOST, PORT, USER, PASSWD)
+main_client = Client(HOST, PORT, USER, PASS)
 main_client.connect()
 
 main_client.client.loop_forever()
