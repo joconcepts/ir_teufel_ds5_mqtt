@@ -129,12 +129,9 @@ class Client:
                 self.ds.mode(),
                 {"sleep": 0.2}
                 ]
-        for i in range(5):
-            arr.append(self.ds.left())
+        for i in range(4):
+            arr.append(self.ds.right())
             arr.append({"sleep": 0.2})
-
-        arr.append(self.ds.right())
-        arr.append({"sleep": 0.2})
 
         arr.append(self.ds.return_menu())
         return arr
